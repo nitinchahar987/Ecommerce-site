@@ -1,8 +1,12 @@
 
+
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import Category from './category';
+import Footer from './Footer';
 import { useEffect, useState } from 'react';
 import About from './About';
 
@@ -38,6 +42,16 @@ axios.get(`https://dummyjson.com/products/category/${selectedcat}`)
       setcateg(finalres)
     })
   }
+
+useEffect(() => {
+  AOS.init({
+    duration: 800, 
+    once: true,    
+  });
+}, []);
+
+
+
   useEffect(()=>{
 getcatagory()
   },[])
@@ -48,7 +62,7 @@ getproduct()
   
   let productss=finalproducts.map((v,i)=>{
     return(
-      <div key={i}>
+      <div data-aos="fade-up" key={i}>
         <Productitems v={v} key={i} addToCart={addToCart}  />
       </div>
     )
@@ -72,95 +86,35 @@ return(
       </Routes>
     </Router>
 
-   <div className=' w-{1320px} '>
-    <h1 className='text-center text-xl font-bold'>Our products</h1>
+   <div className='max-w-[1320px] mx-auto px-4'>
+    
+   <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 py-10 text-white text-center rounded-b-2xl mb-6">
+  <h1 className="text-4xl font-extrabold mb-2">Welcome to MyStore</h1>
+  <p className="text-lg">Shop the best products from top brands</p>
+</div>
+
+    <h1 className='text-center text-3xl font-extrabold text-gray-800 mb-6 tracking-wide' data-aos="zoom-in">
+  Explore Our Products
+</h1>
     <div className='ml-10 bg-yellow-200 w-20 rounded-sm absolute right-3'> <i class="fa-solid fa-cart-shopping"> </i>Cart<span
     className='absolute top-0 right-3' > {cart.length}</span> </div>
 <div className='grid grid-cols-[30%_auto] gap-[20px] mt-8'>
 
    <div className='ml-3 '>
-    <Category categ={categ} setselectedcat={setselectedcat}/>
+    <Category categ={categ} setselectedcat={setselectedcat} selectedcat={selectedcat}/>
     </div>
-  <div className='grid grid-cols-3 gap-4'>
-    {
-      finalproducts.length>0 ? 
-       productss
-       :
-       "opppsss!! these products are out  of stock"
-    }
- 
+  <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6' data-aos="fade-up">
+   {finalproducts.length > 0 ? (
+  productss
+) : (
+  <div className="col-span-3 text-center text-gray-600 text-lg">Loading products...</div>
+)}
   </div>
 </div>
 
    </div>
 
-   <div className='text-white pl-9 grid grid-cols-3 bg-black '>
-    <div className='mb-60 space-y-8'><span className='mt-20 mb-6 font-bold text-[22px] cursor-pointer' >Contactus</span>
-      <br/>
-      <br/>
-     <span className='  cursor-pointer'> Details </span>
-      <br/>
-      <br/>
-     <span className='mt-20 mb-6 cursor-pointer'> Buy products
-    </span>
-    <br/>
-    <br/>
-    
-    <span className='mt-20 mb-6 cursor-pointer'> global selling</span>
-      <br/>
-      <br/>
-     <span className='mt-20 mb-6 cursor-pointer'> products margin</span>
-      <br/>
-      <br/>
-     <span className='mt-20 mb-6 cursor-pointer'> owners
-    </span>
-    </div>
-    <div>
-    <span className='mt-20 mb-6 font-bold text-[22px] cursor-pointer'>Rate us</span>
-      <br/>
-      <br/>
-     <span className='mt-20 mb-6 cursor-pointer'> Know more</span>
-      <br/>
-      <br/>
-     <span className='mt-20 mb-6 cursor-pointer'> Fulfilment by site
-    </span>
-    <br/>
-    <br/>
-    <span className='mt-20 mb-6 cursor-pointer'> Protect and build your brand</span>
-      <br/>
-      <br/>
-     <span className='mt-20 mb-6 cursor-pointer'> M.no-9896953961</span>
-      <br/>
-      <br/>
-     <span className='mt-20 mb-6 cursor-pointer'> insta-nitin_jaat_
-    </span>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <i class="fa-brands fa-square-instagram text-[30px] m-[10px]"></i> 
-    <i class="fa-brands fa-twitter text-[30px] m-[10px]"></i>
-    <i class="fa-brands fa-facebook text-[30px] m-[10px]"></i>
-    </div>
-    <div>
-      <span className='mt-20 mb-6 font-bold text-[22px] cursor-pointer'> Return centre</span>
-      <br/>
-      <br/>
-     <span className='mt-20 mb-6 cursor-pointer'> Download app</span>
-      <br/>
-      <br/>
-     <span className='mt-20 mb-6 cursor-pointer'> 100% purchase protection
-    </span>
-    <span className='mt-20 mb-6 cursor-pointer'> products</span>
-      <br/>
-      <br/>
-     <span className='mt-20 mb-6'> your account</span>
-      <br/>
-      <br/>
-     <span className='mt-20 mb-6 cursor-pointer'> Help
-    </span>
-    </div>
-   </div>
+  <Footer/>
    
 </div>
 
@@ -174,23 +128,25 @@ export default App;
 function Productitems({v,addToCart}){
   
   return(
-    <div className='shadow-lg  pb-4 rounded-md bg-gray-100 '>
-     <img
-  src={v.images[0]}
-  alt={v.title}
-  className="w-full h-48 object-cover rounded loading='lazy'"/>
-      <h4 className='ml-5 font-bold'>brand:{v.brand}</h4>
-      <h4 className='text-green-600 ml-5 font-bold'>title:{v.title}</h4>
-      <h4 className='text-red-900 font-bold ml-5'>price:{v.price*100}</h4>
-      <button 
-        onClick={() => addToCart(v)} 
-        className='bg-blue-500 mt-2 ml-2 px-3 py-1 rounded hover:bg-blue-700 transition-all'
-      >
-        Add to Cart
-      </button>
-
-    </div>
-  )
+    <div className='bg-white shadow-md rounded-lg overflow-hidden transform hover:scale-105 transition duration-300' data-aos="zoom-in">
+  <img
+    src={v.images[0]}
+    alt={v.title}
+    className="w-full h-full object-cover"
+    loading="lazy"
+  />
+  <div className='p-4'>
+    <h4 className='text-gray-600 text-sm'>Brand: <span className='font-bold'>{v.brand}</span></h4>
+    <h4 className='text-xl font-semibold text-gray-800 mt-1'>{v.title}</h4>
+    <p className='text-red-500 font-bold mt-2'>₹{v.price * 100}</p>
+    <button
+      onClick={() => addToCart(v)}
+      className='mt-4 w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-2 rounded hover:from-blue-600 hover:to-indigo-700 transition'
+    >
+      Add to Cart
+    </button>
+  </div>
+</div>)
 }
 
 

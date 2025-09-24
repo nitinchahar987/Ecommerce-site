@@ -1,22 +1,27 @@
 import React from 'react'
 
-export default function Category({categ,setselectedcat}) {
-  let Cat=categ.map((res,i)=>{
-    return(
-<li onClick={()=>setselectedcat(res.name)} key={i} className='bg-gray-100 my-3 text-lg py-1 cursor-pointer'>
-          {res.name}
-        </li>
-    )
- 
-  })
+export default function Category({categ,setselectedcat,selectedcat}) {
+  
+  
   
   return (
-    <div>
-      <h1 className='text-2xl font-bold'>Category</h1>
-      <ul>
-        {Cat}
-
-      </ul>
-    </div>
+    <div className='bg-white shadow rounded p-4' data-aos="fade-right">
+  <h2 className='text-xl font-bold mb-4 text-gray-800'>Categories</h2>
+  <ul className='space-y-2'>
+    {categ.map((res, i) => (
+      <li
+        onClick={() => setselectedcat(res.name)}
+        key={i}
+        className={`py-2 px-3 rounded cursor-pointer transition ${
+          selectedcat === res.name
+            ? 'bg-blue-500 text-white'
+            : 'bg-gray-100 hover:bg-blue-100'
+        }`}
+      >
+        {res.name}
+      </li>
+    ))}
+  </ul>
+</div>
   )
 }
